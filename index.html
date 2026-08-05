@@ -82,6 +82,25 @@
       <button id="end-btn">play again</button>
     </div>
 
+    <!-- MUSIC --------------------------------------------------------------
+         The file itself is named in game.js (MUSIC_FILE). It plays across
+         every screen, so the element and its toggle live outside them. -->
+    <audio id="bgm" loop preload="auto"></audio>
+
+    <button class="sound" id="sound" aria-label="Turn music off" aria-pressed="true">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path class="sound-body" d="M4 12 H9.5 L17 5.5 V26.5 L9.5 20 H4 Z"/>
+        <g class="sound-waves">
+          <path d="M20.5 12.4 A5 5 0 0 1 20.5 19.6"/>
+          <path d="M24 8.8 A9.6 9.6 0 0 1 24 23.2"/>
+        </g>
+        <g class="sound-cross">
+          <path d="M21 12 L28 20"/>
+          <path d="M28 12 L21 20"/>
+        </g>
+      </svg>
+    </button>
+
   </div>
 
   <script src="rooms.js"></script>

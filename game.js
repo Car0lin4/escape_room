@@ -258,6 +258,54 @@ function restart() {
   show('entrance');
 }
 
+/* --- music ---------------------------------------------------------------- */
+/* Drop the track into assets/ and put its file name here — that is the only
+   line to change. */
+const MUSIC_FILE = 'assets/music.mp3';
+const MUSIC_VOLUME = 0.35;   // background level: present, never in the way
+
+const music = {
+  el: null,
+  on: localStorage.getItem('escapeRoomMuted') !== '1',
+};
+
+function renderSound() {
+  const btn = $('sound');
+  btn.classList.toggle('muted', !music.on);
+  btn.setAttribute('aria-pressed', String(music.on));
+  btn.setAttribute('aria-label', music.on ? 'Turn music off' : 'Turn music on');
+}
+
+/* Browsers refuse to start audio before the player has touched the page, so
+   the attempt is repeated on the first click or key press anywhere. */
+function tryPlay() {
+  if (!music.on || !music.el) return;
+  music.el.play().then(dropUnlock).catch(() => {});
+}
+
+function dropUnlock() {
+  removeEventListener('pointerdown', tryPlay);
+  removeEventListener('keydown', tryPlay);
+}
+
+function toggleSound() {
+  music.on = !music.on;
+  localStorage.setItem('escapeRoomMuted', music.on ? '0' : '1');
+  renderSound();
+  if (music.on) tryPlay();
+  else music.el.pause();
+}
+
+function initMusic() {
+  music.el = $('bgm');
+  music.el.src = MUSIC_FILE;
+  music.el.volume = MUSIC_VOLUME;
+  renderSound();
+  tryPlay();
+  addEventListener('pointerdown', tryPlay);
+  addEventListener('keydown', tryPlay);
+}
+
 /* --- preloading ----------------------------------------------------------- */
 /* The room photos are a couple of megabytes each. Pull them down quietly while
    the player is choosing a door, so opening one is instant rather than a wait
@@ -274,6 +322,7 @@ $('lupa').addEventListener('click', toggleHint);
 $('hint-close').addEventListener('click', toggleHint);
 $('hotspot').addEventListener('click', openQuestion);
 $('end-btn').addEventListener('click', restart);
+$('sound').addEventListener('click', toggleSound);
 
 // Esc closes whatever is on top
 addEventListener('keydown', (e) => {
@@ -283,6 +332,7 @@ addEventListener('keydown', (e) => {
 });
 
 fitStage();
+initMusic();
 renderLives();
 buildWall();
 show('entrance');
