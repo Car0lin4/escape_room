@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escape Room</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🚪</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne+Tactile&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- The whole game lives on a fixed 1280x832 stage that is scaled to fit. -->
+  <div id="stage">
+
+    <!-- 1. ENTRANCE -------------------------------------------------------->
+    <section class="screen" id="screen-entrance">
+      <div class="photo entrance-photo"></div>
+      <button class="enter-hit" id="enter-btn" aria-label="Enter the escape room"></button>
+      <p class="enter-prompt">click to enter</p>
+    </section>
+
+    <!-- 2. DOOR WALL ------------------------------------------------------->
+    <section class="screen" id="screen-wall" hidden>
+      <div class="photo wall-photo"></div>
+      <div class="scrim wall-scrim"></div>
+      <div id="doors"></div>
+      <p class="wall-prompt" id="wall-prompt">pick a door</p>
+    </section>
+
+    <!-- 3. ROOM ------------------------------------------------------------>
+    <section class="screen" id="screen-room" hidden>
+      <div class="photo" id="room-photo"></div>
+      <div class="scrim" id="room-scrim"></div>
+
+      <!-- the hidden thing you have to find -->
+      <button class="hotspot" id="hotspot" aria-label="Examine"></button>
+
+      <!-- magnifier -> toggles the hint -->
+      <button class="lupa" id="lupa" aria-label="Show hint">
+        <span class="lupa-glow"></span>
+        <span class="lupa-img"></span>
+      </button>
+
+      <!-- hint banner -->
+      <div class="hint" id="hint" hidden>
+        <svg class="hint-shape" viewBox="0 0 960.5 96.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 0 L33.5 36.5 L33.5 96.5 L960.5 96.5 L960.5 0 Z"
+                fill="none" stroke="#FFE4E4" stroke-width="62" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <p class="hint-text" id="hint-text"></p>
+        <button class="hint-close" id="hint-close" aria-label="Close hint">
+          <svg viewBox="0 0 26.5 26.89" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path transform="matrix(1 0 0 1 0 4.028)" d="M0 18.832 L26.5 0"
+                  fill="none" stroke="#000" stroke-width="5" vector-effect="non-scaling-stroke"/>
+            <path transform="matrix(-0.021 1 -1 -0.021 22.936 0.389)" d="M0 18.829 L26.504 0"
+                  fill="none" stroke="#000" stroke-width="5" vector-effect="non-scaling-stroke"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 4. QUESTION MODAL ------------------------------------------------>
+      <div class="modal-layer" id="modal-layer" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="q-text">
+          <div class="modal-head"></div>
+          <div class="modal-body"></div>
+          <h2 class="q-text" id="q-text"></h2>
+          <div id="answers"></div>
+        </div>
+      </div>
+
+      <!-- lives -->
+      <div class="lives" id="lives" aria-label="Lives remaining"></div>
+    </section>
+
+    <!-- GAME OVER / WIN ---------------------------------------------------->
+    <div class="endcard" id="endcard" hidden>
+      <h1 id="end-title"></h1>
+      <p id="end-sub"></p>
+      <button id="end-btn">play again</button>
+    </div>
+
+  </div>
+
+  <script src="rooms.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

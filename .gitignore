@@ -1,0 +1,8 @@
+.vercel
+.DS_Store
+
+# The game loads the .webp versions. The original PNGs stay on disk as the
+# source to re-export from, but are kept out of version control for size.
+room_photos/*.png
+assets/*.png
+room_hint_reference/*.png

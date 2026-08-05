@@ -1,0 +1,12 @@
+# Reference only — shows where every hotspot is. Must never be published.
+room_hint_reference/
+
+# The answer key, with the correct answers highlighted. Must never be published.
+questions_and_answers.pdf
+
+README.md
+
+# The game uses the .webp versions. The original PNGs stay on disk as the
+# source to re-export from, but there is no reason to publish them.
+room_photos/*.png
+assets/*.png

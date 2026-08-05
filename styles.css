@@ -1,0 +1,381 @@
+/* ---------------------------------------------------------------------------
+   Escape Room — all geometry is in the Paper file's 1280x832 coordinate space.
+   #stage is scaled by JS so the whole board always fits the browser window.
+--------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: system-ui, sans-serif;
+}
+
+#stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1280px;
+  height: 832px;
+  transform-origin: center center;
+  overflow: hidden;
+  background: #000;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.screen[hidden] { display: none; }
+
+/* shared photo / scrim layers ---------------------------------------------- */
+.photo  { position: absolute; background-repeat: no-repeat; }
+.scrim  { position: absolute; pointer-events: none; }
+
+/* --- 1. ENTRANCE ---------------------------------------------------------- */
+.entrance-photo {
+  left: -13px; top: -74px; width: 1306px; height: 981px;
+  background-image: url('assets/entrance.webp');
+  background-size: cover;
+  background-position: 50%;
+}
+
+/* the doorway between the red curtains */
+.enter-hit {
+  position: absolute;
+  left: 452px; top: 390px; width: 320px; height: 430px;
+  border: 0; padding: 0; cursor: pointer;
+  background: radial-gradient(ellipse at 50% 60%, #ffffff26, #ffffff00 70%);
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+.enter-hit:hover, .enter-hit:focus-visible { opacity: 1; outline: none; }
+
+.enter-prompt {
+  position: absolute;
+  left: 0; right: 0; bottom: 42px;
+  margin: 0;
+  text-align: center;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-size: 30px;
+  color: #FFE4E4;
+  text-shadow: 0 2px 14px #000, 0 0 30px #0009;
+  pointer-events: none;
+  animation: breathe 2.8s ease-in-out infinite;
+}
+@keyframes breathe { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+/* --- 2. DOOR WALL --------------------------------------------------------- */
+.wall-photo {
+  left: 0; top: -18px; width: 1280px; height: 1111px;
+  background-image: url('assets/doorwall.webp');
+  background-size: cover;
+  background-position: 50%;
+}
+.wall-scrim { left: -43px; top: 0; width: 1365px; height: 868px; background: #00000054; }
+
+.door {
+  position: absolute;
+  border: 0; padding: 0;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: filter .35s ease, transform .35s ease, opacity .6s ease;
+}
+.door:hover, .door:focus-visible {
+  filter: brightness(1.55) drop-shadow(0 0 22px #f8c60099);
+  transform: scale(1.04);
+  outline: none;
+  z-index: 2;
+}
+/* A solved door is gone for good: the picture burns away and all that is
+   left is the empty, candle-lit frame — like the other empty frames here. */
+.door.solved {
+  pointer-events: none;
+  background-image: none !important;
+  background: radial-gradient(ellipse 62% 46% at 50% 90%,
+              #FFC275 0%, #D0801F 20%, #4A2C11 52%, #150E07 80%);
+  box-shadow: inset 0 0 26px 8px #000000b8;
+  animation: burnOut .9s ease both;
+}
+@keyframes burnOut {
+  0%   { filter: brightness(3.4) saturate(.2); transform: scale(1.06); }
+  55%  { filter: brightness(1.6); }
+  100% { filter: none; transform: scale(1); }
+}
+.door.locked { cursor: default; }
+.door.locked:hover { filter: brightness(1.15); transform: none; }
+
+.wall-prompt {
+  position: absolute;
+  left: 0; right: 0; bottom: 26px;
+  margin: 0;
+  text-align: center;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-size: 26px;
+  color: #FFE4E4;
+  text-shadow: 0 2px 12px #000;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+
+/* --- 3. ROOM -------------------------------------------------------------- */
+#room-photo { left: 0; top: 0; }
+
+.hotspot {
+  position: absolute;
+  border: 0; padding: 0;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.hotspot:hover, .hotspot:focus-visible {
+  background: radial-gradient(circle, #FFE4E43D, #FFE4E400 68%);
+  outline: none;
+}
+/* nudges the player after a few seconds of hunting */
+.hotspot.tease { animation: tease 2.4s ease-in-out infinite; }
+@keyframes tease {
+  0%, 100% { box-shadow: 0 0 0 0 #FFE4E400; }
+  50%      { box-shadow: 0 0 34px 10px #FFE4E42E; }
+}
+
+/* magnifier */
+.lupa {
+  position: absolute;
+  left: -10px; top: 0; width: 154.06px; height: 146.33px;
+  border: 0; padding: 0; background: transparent;
+  cursor: pointer;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.lupa:hover, .lupa:focus-visible { transform: scale(1.09) rotate(-4deg); outline: none; }
+.lupa-img, .lupa-glow {
+  position: absolute;
+  left: 101.34px; top: 0;
+  width: 87.61px; height: 126.88px;
+  background-image: url('assets/lupa.webp');
+  background-size: cover;
+  background-position: 50%;
+  transform-origin: top left;
+  rotate: 53deg;
+}
+.lupa-glow { filter: blur(20.95px); }
+.lupa-img  { filter: drop-shadow(0 4px 2px #00000040); }
+
+/* hint banner */
+.hint { position: absolute; inset: 0; pointer-events: none; }
+.hint[hidden] { display: none; }
+.hint > * { animation: dropIn .32s cubic-bezier(.34,1.4,.64,1) both; }
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* The 62px stroke bleeds 31px past the path on every side, so the visible
+   left edge sits at 216 - 31 = 185px — clear of the magnifier (x: -10..144). */
+.hint-shape {
+  position: absolute;
+  left: 216px; top: 60px;
+  width: 960.5px; height: 96.5px;
+  overflow: visible;
+  background: #FFE4E4;
+}
+.hint-text {
+  position: absolute;
+  left: 292px; top: 80px;
+  width: 832px;
+  margin: 0;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-size: 40px;
+  line-height: 48px;
+  color: #000;
+}
+.hint-close {
+  position: absolute;
+  left: 1131px; top: 54px;
+  width: 52px; height: 52px;
+  border: 0; padding: 0; background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform .2s ease;
+}
+.hint-close svg { width: 26.5px; height: 26.89px; overflow: visible; }
+.hint-close:hover, .hint-close:focus-visible { transform: rotate(90deg); outline: none; }
+
+/* --- 4. QUESTION MODAL ---------------------------------------------------- */
+.modal-layer {
+  position: absolute;
+  inset: 0;
+  background: #00000073;
+  animation: fade .25s ease both;
+}
+.modal-layer[hidden] { display: none; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  position: absolute;
+  left: 269px; top: 129px;
+  width: 762.09px; height: 573.44px;
+  border-radius: 16.2059px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 30px 80px #000000a6;
+  animation: pop .3s cubic-bezier(.34,1.5,.64,1) both;
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(.9) translateY(14px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-head {
+  position: absolute; inset: 0;
+  border-radius: 16.2059px;
+  background: #F8C600;
+}
+.modal-body {
+  position: absolute;
+  left: 0; top: 174.52px;
+  width: 762.09px; height: 398.91px;
+  border-radius: 16.2059px;
+  background: #FFEEAB;
+}
+
+/* font-size / line-height are set by game.js so long questions shrink to fit */
+.q-text {
+  position: absolute;
+  left: 55.27px; top: 29.09px;
+  width: 657.79px;
+  margin: 0;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 53.19px;
+  line-height: 64px;
+  color: #000;
+}
+
+/* `top` and `height` are set by game.js: the stack is sized to the number of
+   options so two long answers fill the same space three short ones do. */
+.answer {
+  position: absolute;
+  left: 52.36px;
+  width: 657.79px;
+  border: 0;
+  border-radius: 16.2059px;
+  background: #9A0000;
+  box-shadow: inset 7.48px 8.73px 2.37px 3.32px #00000040;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 15px 19px 15px 19.11px;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #F2E5E5;
+  transition: background .18s ease, transform .18s ease;
+}
+.answer span {
+  display: block;
+  width: 100%;
+  font-size: 29.05px;
+  line-height: 36px;
+}
+
+.answer:hover:not(:disabled), .answer:focus-visible:not(:disabled) {
+  background: #B60505;
+  transform: translateX(4px);
+  outline: none;
+}
+.answer:disabled { cursor: default; }
+
+.answer.wrong  { animation: shake .45s ease; background: #4A0000; color: #F2E5E580; }
+.answer.right  { background: #1E6B2E; transform: scale(1.02); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-11px); }
+  40% { transform: translateX(9px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+
+/* --- LIVES ---------------------------------------------------------------- */
+.lives {
+  position: absolute;
+  right: 26px; bottom: 22px;
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+  pointer-events: none;
+}
+.life {
+  width: 26px; height: 26px;
+  background: #C1121F;
+  clip-path: path('M13 25 C13 25 0 16.5 0 8 C0 3 3.6 0 7.4 0 C10 0 12 1.4 13 3.4 C14 1.4 16 0 18.6 0 C22.4 0 26 3 26 8 C26 16.5 13 25 13 25 Z');
+  filter: drop-shadow(0 2px 5px #000000a6);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.life.lost { opacity: .5; background: #6E6A6A; transform: scale(.78); }
+.life.popping { animation: burst .45s ease; }
+@keyframes burst {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.55); }
+  100% { transform: scale(.78); }
+}
+
+/* --- END CARD ------------------------------------------------------------- */
+.endcard {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #0b0708ef;
+  backdrop-filter: blur(16px) saturate(.4);
+  animation: fade .4s ease both;
+}
+.endcard[hidden] { display: none; }
+.endcard h1 {
+  margin: 0;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-size: 84px;
+  line-height: 1;
+  color: #F8C600;
+}
+.endcard p {
+  margin: 0 0 26px;
+  font-family: Georgia, serif;
+  font-size: 22px;
+  color: #FFE4E4b3;
+}
+.endcard button {
+  border: 0;
+  border-radius: 999px;
+  padding: 15px 40px;
+  background: #9A0000;
+  box-shadow: inset 5px 6px 2px 2px #00000040;
+  font-family: Georgia, serif;
+  font-size: 21px;
+  color: #F2E5E5;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+.endcard button:hover { background: #B60505; transform: translateY(-2px); }
+
+/* --- TOAST (door with no room yet) ---------------------------------------- */
+.toast {
+  position: absolute;
+  left: 50%; bottom: 84px;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: #FFE4E4;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-size: 24px;
+  color: #000;
+  box-shadow: 0 10px 30px #000000a6;
+  animation: dropIn .3s cubic-bezier(.34,1.4,.64,1) both;
+}
