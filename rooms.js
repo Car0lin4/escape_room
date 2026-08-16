@@ -5,11 +5,15 @@
    bottom-right) exactly as the doors sit in the Paper file.
 
      photo    - the room picture, shown full-frame behind everything
-     lock     - the little Ley 100 puzzle you must beat BEFORE the door opens
+     lock     - the little Law 100 puzzle you must beat BEFORE the door opens
      hint     - text shown in the pink banner when the magnifier is clicked
      hotspot  - the invisible area you must find and click, in board
                 coordinates (the board is 1280 x 832)
      question - the prompt and its options; mark the right one with `correct`
+
+   Everything the player reads is in English. The only Spanish left anywhere
+   is a handful of proper names that have no English form — EPS, IPS, AFP,
+   ARL, FOSYGA, ADRES, Sisben — and those are initials, not words.
 
    Hotspot boxes were measured from the images in `room_hint_reference/`.
    Those reference images are NOT used by the game — they never ship.
@@ -20,9 +24,10 @@
    ---------------------------------------------------------------------------
    THE LOCKS
    ---------------------------------------------------------------------------
-   Every lock is a different kind of little machine, all of them about the
-   Ley 100 de 1993. `type` picks the machine, the rest of the keys are what
-   that machine needs. `hint` is only shown after two failed attempts.
+   Every lock is a different kind of little machine, all of them about Law 100
+   of 1993 (Ley 100 de 1993), the act that created Colombia's comprehensive
+   social security system. `type` picks the machine, the rest of the keys are
+   what that machine needs. `hint` only shows after two failed attempts.
 
      keypad    - punch a number in on a pin pad           (answer: string)
      wheels    - spin one wheel per field                 (wheels: [...])
@@ -47,8 +52,8 @@ const ROOMS = [
     lock: {
       type: 'keypad',
       title: 'The combination lock',
-      prompt: '“Por la cual se crea el sistema de seguridad social integral.” ' +
-              'Bogotá, 1993. Punch in the number of that ley.',
+      prompt: '“By which the comprehensive social security system is created.” ' +
+              'Colombia, 1993. Punch in the number of that law.',
       answer: '100',
       hint: 'Three digits, and the roundest number the Congress had lying around.',
     },
@@ -102,9 +107,9 @@ const ROOMS = [
     lock: {
       type: 'order',
       title: 'The four-bolt lock',
-      prompt: 'Ley 100 is built out of four Libros. Tap them in the order the ' +
-              'law lays them out, Libro I to Libro IV.',
-      items: ['Pensiones', 'Salud', 'Riesgos profesionales', 'Servicios sociales complementarios'],
+      prompt: 'Law 100 is built out of four Books. Tap them in the order the ' +
+              'law lays them out, Book I to Book IV.',
+      items: ['Pensions', 'Health', 'Occupational risks', 'Complementary social services'],
       hint: 'Old age first, then the doctor, then the accident at work — and the extras last.',
     },
     photo: 'room_photos/3.webp',
@@ -130,9 +135,9 @@ const ROOMS = [
       title: 'The impostor lock',
       prompt: 'Article 2 names the principles the system has to obey. ' +
               'One word on this plate was never one of them — press it.',
-      items: ['Eficiencia', 'Universalidad', 'Solidaridad', 'Integralidad',
-              'Unidad', 'Participación', 'Rentabilidad'],
-      answer: 'Rentabilidad',
+      items: ['Efficiency', 'Universality', 'Solidarity', 'Comprehensiveness',
+              'Unity', 'Participation', 'Profitability'],
+      answer: 'Profitability',
       hint: 'Social security is an essential public service, not an investment. ' +
             'One of these words only cares about the return.',
     },
@@ -157,13 +162,13 @@ const ROOMS = [
     lock: {
       type: 'match',
       title: 'The initials lock',
-      prompt: 'Four sets of initials run the system Ley 100 built. ' +
-              'Pair each one with its name.',
+      prompt: 'Four sets of initials run the system Law 100 built. ' +
+              'Pair each one with what it stands for.',
       pairs: [
-        ['EPS', 'Entidad Promotora de Salud'],
-        ['IPS', 'Institución Prestadora de Servicios de Salud'],
-        ['AFP', 'Administradora de Fondos de Pensiones'],
-        ['ARL', 'Administradora de Riesgos Laborales'],
+        ['EPS', 'Health Promoting Entity'],
+        ['IPS', 'Health Service Provider Institution'],
+        ['AFP', 'Pension Fund Administrator'],
+        ['ARL', 'Occupational Risk Administrator'],
       ],
       hint: 'One signs you up, one treats you, one holds your savings, ' +
             'and one covers the accident at work.',
@@ -188,16 +193,16 @@ const ROOMS = [
     lock: {
       type: 'sort',
       title: 'The two-drawer lock',
-      prompt: 'Health has two régimenes. File each affiliate in the right drawer.',
-      bins: ['Contributivo', 'Subsidiado'],
+      prompt: 'Health has two regimes. File each affiliate in the right drawer.',
+      bins: ['Contributory', 'Subsidized'],
       items: [
         { text: 'A worker hired under an employment contract', bin: 0 },
-        { text: 'A pensioner drawing their mesada every month', bin: 0 },
-        { text: 'A household with no ability to pay, found through the Sisbén', bin: 1 },
+        { text: 'A pensioner drawing a monthly payment', bin: 0 },
+        { text: 'A household with no ability to pay, found through the Sisben', bin: 1 },
         { text: 'Indigenous communities and people living on the street', bin: 1 },
       ],
-      hint: 'If you can pay the cotización, you contribute. ' +
-            'If you cannot, the system subsidises you.',
+      hint: 'If you can pay the contribution, you contribute. ' +
+            'If you cannot, the system subsidizes you.',
     },
     photo: 'room_photos/6.webp',
     hint: 'Look up at the altar. The only window with colour left!',
@@ -219,10 +224,10 @@ const ROOMS = [
     lock: {
       type: 'words',
       title: 'The word lock',
-      prompt: 'Name the pension régimen where every peso you save stays in your ' +
+      prompt: 'Name the pension regime where every peso you save stays in your ' +
               'own account. Tap the words in order.',
-      answer: ['Régimen', 'de', 'Ahorro', 'Individual', 'con', 'Solidaridad'],
-      hint: 'Its initials spell RAIS — and the S on the end is Solidaridad.',
+      answer: ['Individual', 'Savings', 'with', 'Solidarity', 'System'],
+      hint: 'Colombians call it RAIS. Begin with the word that says the money is yours alone.',
     },
     photo: 'room_photos/7.webp',
     hint: 'Keep walking with your eyes. All the way to the end!',
@@ -246,9 +251,9 @@ const ROOMS = [
       title: 'The verdict lock',
       prompt: 'Three statements. Mark each one true or false, then throw the bolt.',
       items: [
-        { text: 'Ley 100 runs to 289 articles.', answer: true },
+        { text: 'Law 100 runs to 289 articles.', answer: true },
         { text: 'For a worker on a payroll, joining the pension system is optional.', answer: false },
-        { text: 'Part of every contribution helps to finance the régimen subsidiado.', answer: true },
+        { text: 'Part of every contribution helps to finance the subsidized regime.', answer: true },
       ],
       hint: 'Nothing about affiliation is optional — that is the whole point of ' +
             'a compulsory system.',
@@ -273,7 +278,7 @@ const ROOMS = [
     lock: {
       type: 'pick2',
       title: 'The percentage lock',
-      prompt: 'In the contributory health régimen the employer and the worker ' +
+      prompt: 'In the contributory health regime the employer and the worker ' +
               'together pay 12.5% of the base income. Dial in each share.',
       rows: [
         { label: 'Employer', options: ['4%', '6.25%', '8.5%', '12.5%'], answer: '8.5%' },
@@ -302,7 +307,7 @@ const ROOMS = [
     lock: {
       type: 'dials',
       title: 'The letter lock',
-      prompt: 'Ley 100 created FOSYGA, the Fondo de Solidaridad y Garantía. ' +
+      prompt: 'Law 100 created FOSYGA, the Solidarity and Guarantee Fund. ' +
               'In 2017 its money passed to a new administrator — spin the dials ' +
               'to spell it.',
       answer: 'ADRES',

@@ -4,7 +4,7 @@
    entrance -> door wall -> lock -> room -> (hint) -> question -> back to wall
    A solved door disappears from the wall. A wrong answer costs a life.
 
-   Every door is locked: clicking one raises a small Ley 100 puzzle (locks.js)
+   Every door is locked: clicking one raises a small Law 100 puzzle (locks.js)
    and the room only opens once that puzzle is beaten.
 --------------------------------------------------------------------------- */
 

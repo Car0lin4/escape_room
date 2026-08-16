@@ -9,3 +9,4 @@ room_hint_reference/*.png
 
 # The answer key. Stays local — must never reach the repo or the deploy.
 questions_and_answers.pdf
+ANSWERS.txt

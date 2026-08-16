@@ -2,7 +2,7 @@
    Escape Room — door locks
 
    Every door on the wall is locked. Clicking one raises a small puzzle about
-   the Ley 100 de 1993; beat it and the door opens into its room.
+   Law 100 of 1993; beat it and the door opens into its room.
 
    One builder per kind of lock. A builder gets the room's `lock` config and
    the empty body element, fills the body, and hands back:
@@ -16,8 +16,8 @@
    an input — that is what makes a pin pad feel like a pin pad.
 --------------------------------------------------------------------------- */
 
-const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-                'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 
