@@ -1,0 +1,39 @@
+# Netlify — the game is plain HTML/CSS/JS sitting at the repo root, so there is
+# nothing to build. `deploy.sh` publishes it.
+#
+# Deploys are made from a clean export of what git has committed (see
+# deploy.sh), which is what keeps the answer key and the hotspot reference
+# images off the live link: they are gitignored, so they are never in the
+# export in the first place.
+
+[build]
+  publish = "."
+  command = ""
+
+# The room photos and door art never change under the same name, so they can
+# sit in the browser cache. The game's own files must not — an update has to
+# show up on the link the moment it is deployed.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/room_photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
