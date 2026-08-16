@@ -1,8 +1,11 @@
 /* ---------------------------------------------------------------------------
    Escape Room — game flow
 
-   entrance -> door wall -> room -> (hint) -> question -> back to wall
+   entrance -> door wall -> lock -> room -> (hint) -> question -> back to wall
    A solved door disappears from the wall. A wrong answer costs a life.
+
+   Every door is locked: clicking one raises a small Ley 100 puzzle (locks.js)
+   and the room only opens once that puzzle is beaten.
 --------------------------------------------------------------------------- */
 
 const $ = (id) => document.getElementById(id);
@@ -10,6 +13,7 @@ const $ = (id) => document.getElementById(id);
 const state = {
   lives: LIVES,
   solved: new Set(),
+  unlocked: new Set(),   // doors whose lock has already been picked
   current: null,   // the room object currently being played
   teaseTimer: null,
 };
@@ -25,6 +29,7 @@ addEventListener('resize', fitStage);
 function show(name) {
   for (const el of document.querySelectorAll('.screen')) el.hidden = true;
   $('screen-' + name).hidden = false;
+  $('lives').hidden = name === 'entrance';
 }
 
 /* --- lives ---------------------------------------------------------------- */
@@ -75,6 +80,14 @@ function buildWall() {
         toast(`Door ${room.id} isn't ready yet.`);
         return;
       }
+      // the lock comes first, and only has to be picked once
+      if (room.lock && !state.unlocked.has(room.id)) {
+        openLock(room, () => {
+          state.unlocked.add(room.id);
+          openRoom(room);
+        });
+        return;
+      }
       openRoom(room);
     });
 
@@ -83,7 +96,7 @@ function buildWall() {
 
   const left = ROOMS.filter(r => !state.solved.has(r.id)).length;
   $('wall-prompt').textContent =
-    left === ROOMS.length ? 'pick a door'
+    left === ROOMS.length ? 'pick a door — every one of them is locked'
     : left ? `${left} ${left === 1 ? 'door' : 'doors'} left`
     : 'every door is open…';
 }
@@ -249,7 +262,9 @@ function win() {
 function restart() {
   state.lives = LIVES;
   state.solved.clear();
+  state.unlocked.clear();
   state.current = null;
+  closeLock();
   $('endcard').hidden = true;
   $('modal-layer').hidden = true;
   $('hint').hidden = true;
@@ -323,10 +338,13 @@ $('hint-close').addEventListener('click', toggleHint);
 $('hotspot').addEventListener('click', openQuestion);
 $('end-btn').addEventListener('click', restart);
 $('sound').addEventListener('click', toggleSound);
+$('lock-go').addEventListener('click', attemptLock);
+$('lock-back').addEventListener('click', closeLock);
 
 // Esc closes whatever is on top
 addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
+  if (!$('lock-layer').hidden) { closeLock(); return; }
   if (!$('modal-layer').hidden) { $('modal-layer').hidden = true; return; }
   if (!$('hint').hidden) toggleHint();
 });

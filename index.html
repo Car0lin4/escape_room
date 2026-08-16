@@ -30,6 +30,39 @@
       <p class="wall-prompt" id="wall-prompt">pick a door</p>
     </section>
 
+    <!-- 2b. DOOR LOCK ------------------------------------------------------
+         Every door is locked by a small Ley 100 puzzle. The machine inside
+         .lock-body is built by locks.js from the room's `lock` config. -->
+    <div class="lock-layer" id="lock-layer" hidden>
+      <div class="lock-frame">
+        <div class="lock-plate" id="lock-plate" role="dialog" aria-modal="true"
+             aria-labelledby="lock-title">
+
+          <svg class="lock-icon" viewBox="0 0 40 46" aria-hidden="true">
+            <path class="lock-shackle" d="M11 20 V13 A9 9 0 0 1 29 13 V20"/>
+            <rect class="lock-case" x="4" y="20" width="32" height="24" rx="5"/>
+            <circle class="lock-pin" cx="20" cy="30" r="3.2"/>
+            <path class="lock-pin" d="M20 32 V37"/>
+          </svg>
+
+          <p class="lock-eyebrow" id="lock-eyebrow"></p>
+          <h2 class="lock-title" id="lock-title"></h2>
+          <p class="lock-prompt" id="lock-prompt"></p>
+
+          <div class="lock-body" id="lock-body"></div>
+
+          <p class="lock-note" id="lock-note"></p>
+          <button class="lock-go" id="lock-go">unlock</button>
+
+          <button class="lock-back" id="lock-back" aria-label="Back to the wall">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 4 L20 20 M20 4 L4 20"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- 3. ROOM ------------------------------------------------------------>
     <section class="screen" id="screen-room" hidden>
       <div class="photo" id="room-photo"></div>
@@ -70,10 +103,12 @@
           <div id="answers"></div>
         </div>
       </div>
-
-      <!-- lives -->
-      <div class="lives" id="lives" aria-label="Lives remaining"></div>
     </section>
+
+    <!-- LIVES ---------------------------------------------------------------
+         Outside the screens: the count follows you from the wall into a room
+         and back, so it never blinks out between them. -->
+    <div class="lives" id="lives" aria-label="Lives remaining" hidden></div>
 
     <!-- GAME OVER / WIN ---------------------------------------------------->
     <div class="endcard" id="endcard" hidden>
@@ -104,6 +139,7 @@
   </div>
 
   <script src="rooms.js"></script>
+  <script src="locks.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
