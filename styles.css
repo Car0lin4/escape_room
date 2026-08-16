@@ -35,6 +35,188 @@ html, body {
 .photo  { position: absolute; background-repeat: no-repeat; }
 .scrim  { position: absolute; pointer-events: none; }
 
+/* --- 0. TITLE CARD -------------------------------------------------------- */
+/* The entrance photo, pushed far out of focus, so the title sits in the same
+   room the player is about to walk into. */
+.title-photo {
+  left: -13px; top: -74px; width: 1306px; height: 981px;
+  background-image: url('assets/entrance.webp');
+  background-size: cover;
+  background-position: 50%;
+  filter: blur(9px) saturate(.5) brightness(.46);
+  transform: scale(1.06);          /* hides the soft edge the blur leaves */
+}
+.title-scrim {
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, #00000059, #000000d9 78%);
+}
+
+.title-card {
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  transform: translateY(-54%);   /* optical centre: the stamp weighs the block down */
+  text-align: center;
+  pointer-events: none;
+  animation: dropIn .7s cubic-bezier(.34,1.4,.64,1) both;
+}
+.title-eyebrow {
+  margin: 0 0 14px;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 5.5px;
+  text-transform: uppercase;
+  color: #FFE4E47a;
+}
+.title-name {
+  margin: 0;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 104px;
+  line-height: 1;
+  color: #F8C600;
+  text-shadow: 0 4px 30px #000, 0 0 70px #f8c6004d;
+}
+.title-rule {
+  width: 430px; height: 2px;
+  margin: 26px auto 24px;
+  background: linear-gradient(90deg, #F8C60000, #F8C60099, #F8C60000);
+}
+.title-file {
+  display: inline-block;
+  margin: 0;
+  padding: 9px 26px;
+  border: 3px solid #C1121F;
+  border-radius: 4px;
+  background: #9A00001f;
+  transform: rotate(-3.5deg);
+  font-family: Georgia, serif;
+  font-size: 27px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #E24C4C;
+  text-shadow: 0 2px 12px #000;
+}
+
+/* the whole card is the button */
+.title-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0; padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.title-hit:focus-visible { outline: none; }
+
+.title-prompt {
+  position: absolute;
+  left: 0; right: 0; bottom: 42px;
+  margin: 0;
+  text-align: center;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-size: 30px;
+  color: #FFE4E4;
+  text-shadow: 0 2px 14px #000, 0 0 30px #0009;
+  pointer-events: none;
+  animation: breathe 2.8s ease-in-out infinite;
+}
+
+/* --- 0b. OPENING CRAWL ---------------------------------------------------- */
+.story-photo {
+  left: -13px; top: -74px; width: 1306px; height: 981px;
+  background-image: url('assets/entrance.webp');
+  background-size: cover;
+  background-position: 50%;
+  filter: blur(11px) saturate(.4) brightness(.3);
+  transform: scale(1.06);
+}
+.story-scrim { inset: 0; background: #000000ba; }
+
+/* The text is faded out at the top and bottom edges rather than clipped, so it
+   drifts in and out of the dark instead of appearing at a hard line. */
+.story-mask {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #0000 0%, #000 17%, #000 83%, #0000 100%);
+          mask-image: linear-gradient(180deg, #0000 0%, #000 17%, #000 83%, #0000 100%);
+}
+
+.story-crawl {
+  position: absolute;
+  left: 50%; top: 0;
+  width: 880px;
+  padding: 0 20px;
+  text-align: center;
+  transform: translate(-50%, 832px);   /* parked just below the frame */
+}
+.story-crawl.playing { animation: crawl 40s linear both; }
+/* It stops at -80% rather than clearing the frame entirely: by then the last
+   line has already dissolved into the fade at the top, and running on to -100%
+   would only buy four seconds of empty screen before the entrance. */
+@keyframes crawl {
+  from { transform: translate(-50%, 832px); }
+  to   { transform: translate(-50%, -80%); }
+}
+
+.story-title {
+  margin: 0 0 38px;
+  font-family: 'Syne Tactile', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.06;
+  color: #F8C600;
+  text-shadow: 0 3px 24px #000;
+}
+.story-crawl p {
+  margin: 0 0 32px;
+  font-family: Georgia, serif;
+  font-size: 26px;
+  line-height: 40px;
+  color: #FFE4E4e0;
+  text-shadow: 0 2px 14px #000;
+}
+.story-call {
+  color: #F8C600;
+  font-style: italic;
+}
+
+.story-skip {
+  position: absolute;
+  right: 28px; bottom: 26px;
+  z-index: 3;
+  border: 1px solid #FFE4E440;
+  border-radius: 999px;
+  padding: 10px 24px;
+  background: #00000073;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #FFE4E4a6;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.story-skip:hover, .story-skip:focus-visible {
+  color: #FFE4E4;
+  border-color: #F8C600;
+  transform: translateX(3px);
+  outline: none;
+}
+
+/* Anyone who has asked the system for less motion gets the briefing whole and
+   still, at a size that fits the frame, and walks on with the same button. */
+@media (prefers-reduced-motion: reduce) {
+  .story-crawl, .story-crawl.playing {
+    animation: none;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 940px;
+  }
+  .story-title { font-size: 48px; margin-bottom: 26px; }
+  .story-crawl p { font-size: 20px; line-height: 30px; margin-bottom: 20px; }
+  .story-mask { -webkit-mask-image: none; mask-image: none; }
+}
+
 /* --- 1. ENTRANCE ---------------------------------------------------------- */
 .entrance-photo {
   left: -13px; top: -74px; width: 1306px; height: 981px;

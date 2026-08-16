@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
    Escape Room — game flow
 
-   entrance -> door wall -> lock -> room -> (hint) -> question -> back to wall
+   title -> entrance -> wall -> lock -> room -> (hint) -> question -> wall
    A solved door disappears from the wall. A wrong answer costs a life.
 
    Every door is locked: clicking one raises a small Law 100 puzzle (locks.js)
@@ -29,7 +29,24 @@ addEventListener('resize', fitStage);
 function show(name) {
   for (const el of document.querySelectorAll('.screen')) el.hidden = true;
   $('screen-' + name).hidden = false;
-  $('lives').hidden = name === 'entrance';
+  $('lives').hidden = name !== 'wall' && name !== 'room';
+}
+
+/* --- 0b. opening crawl ----------------------------------------------------- */
+/* The animation has to be restarted by hand: the element is still there from
+   the last play-through, and a finished animation will not run again on its
+   own. It walks into the entrance when it reaches the top. */
+function playStory() {
+  const crawl = $('story-crawl');
+  crawl.classList.remove('playing');
+  void crawl.offsetWidth;
+  crawl.classList.add('playing');
+  show('story');
+}
+
+function endStory() {
+  $('story-crawl').classList.remove('playing');
+  show('entrance');
 }
 
 /* --- lives ---------------------------------------------------------------- */
@@ -265,12 +282,15 @@ function restart() {
   state.unlocked.clear();
   state.current = null;
   closeLock();
+  // stop a crawl still running from the last play-through, or its animationend
+  // would fire later and drag the player off the title card
+  $('story-crawl').classList.remove('playing');
   $('endcard').hidden = true;
   $('modal-layer').hidden = true;
   $('hint').hidden = true;
   renderLives();
   buildWall();
-  show('entrance');
+  show('title');
 }
 
 /* --- music ---------------------------------------------------------------- */
@@ -332,6 +352,9 @@ function preloadRooms() {
 }
 
 /* --- wiring --------------------------------------------------------------- */
+$('title-btn').addEventListener('click', playStory);
+$('story-skip').addEventListener('click', endStory);
+$('story-crawl').addEventListener('animationend', endStory);
 $('enter-btn').addEventListener('click', () => { buildWall(); show('wall'); preloadRooms(); });
 $('lupa').addEventListener('click', toggleHint);
 $('hint-close').addEventListener('click', toggleHint);
@@ -344,6 +367,7 @@ $('lock-back').addEventListener('click', closeLock);
 // Esc closes whatever is on top
 addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
+  if (!$('screen-story').hidden) { endStory(); return; }
   if (!$('lock-layer').hidden) { closeLock(); return; }
   if (!$('modal-layer').hidden) { $('modal-layer').hidden = true; return; }
   if (!$('hint').hidden) toggleHint();
@@ -353,4 +377,4 @@ fitStage();
 initMusic();
 renderLives();
 buildWall();
-show('entrance');
+show('title');

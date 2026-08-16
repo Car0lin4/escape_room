@@ -15,8 +15,58 @@
   <!-- The whole game lives on a fixed 1280x832 stage that is scaled to fit. -->
   <div id="stage">
 
+    <!-- 0. TITLE CARD -------------------------------------------------------
+         The case file lands on the desk before you walk into the place. -->
+    <section class="screen" id="screen-title">
+      <div class="photo title-photo"></div>
+      <div class="scrim title-scrim"></div>
+
+      <div class="title-card">
+        <p class="title-eyebrow">confidential · social security archive</p>
+        <h1 class="title-name">The 100 Door Trap</h1>
+        <div class="title-rule"></div>
+        <p class="title-file">file #100</p>
+      </div>
+
+      <button class="title-hit" id="title-btn" aria-label="Open the file"></button>
+      <p class="title-prompt">click to open the file</p>
+    </section>
+
+    <!-- 0b. OPENING CRAWL ---------------------------------------------------
+         The briefing, drifting up the screen. It runs itself out and walks
+         into the entrance; the skip button jumps straight there. -->
+    <section class="screen" id="screen-story" hidden>
+      <div class="photo story-photo"></div>
+      <div class="scrim story-scrim"></div>
+
+      <div class="story-mask">
+        <div class="story-crawl" id="story-crawl">
+          <h2 class="story-title">The Pension System Challenge</h2>
+
+          <p>You and your team are working as social security consultants. You
+             have been given an important mission: prove that you know about the
+             pension system, Law 100, and health rights. In order to do this, you
+             must solve a series of questions and challenges related to the
+             Colombian Pension System under Law 100 of 1993.</p>
+
+          <p>Throughout the game you will have to solve different challenges.
+             Each correct answer will provide you with a clue or code that will
+             help you advance to the next level.</p>
+
+          <p>Your mission is to analyze each situation, identify the correct
+             information, and use your knowledge of the pension system to
+             escape.</p>
+
+          <p class="story-call">Are you ready to find the clues, solve the
+             challenges, and escape? Let the mission begin!</p>
+        </div>
+      </div>
+
+      <button class="story-skip" id="story-skip">skip &rsaquo;</button>
+    </section>
+
     <!-- 1. ENTRANCE -------------------------------------------------------->
-    <section class="screen" id="screen-entrance">
+    <section class="screen" id="screen-entrance" hidden>
       <div class="photo entrance-photo"></div>
       <button class="enter-hit" id="enter-btn" aria-label="Enter the escape room"></button>
       <p class="enter-prompt">click to enter</p>
