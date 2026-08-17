@@ -11,6 +11,10 @@
                 coordinates (the board is 1280 x 832)
      question - the prompt and its options; mark the right one with `correct`
 
+   The locks are all about Law 100 of 1993. The questions inside the rooms
+   reach past it too — doors 6, 8 and 9 ask about the health laws that came
+   after: Law 1438 of 2011 and Statutory Law 1751 of 2015.
+
    Everything the player reads is in English. The only Spanish left anywhere
    is a handful of proper names that have no English form — EPS, IPS, AFP,
    ARL, FOSYGA, ADRES, Sisben — and those are initials, not words.
@@ -208,10 +212,10 @@ const ROOMS = [
     hint: 'Look up at the altar. The only window with colour left!',
     hotspot: { x: 566, y: 268, w: 120, h: 165 },
     question: {
-      text: 'What is the total contribution rate to the General Pension System?',
+      text: 'What was one of the main purposes of Law 1438 of 2011 in Colombia?',
       options: [
-        { text: 'It is 13.5% of the base contribution income.', correct: true },
-        { text: 'It is 10.5% of the base contribution income.' },
+        { text: 'To strengthen the General System of Social Security in Health and improve access to healthcare.', correct: true },
+        { text: 'To eliminate the Colombian healthcare system and replace it with a private insurance system.' },
       ],
     },
   },
@@ -262,10 +266,10 @@ const ROOMS = [
     hint: 'Someone on the table is looking straight at you!',
     hotspot: { x: 453, y: 555, w: 100, h: 119 },
     question: {
-      text: 'Disability pension refers to:',
+      text: 'What approach does Law 1438 of 2011 promote in the Colombian healthcare system?',
       options: [
-        { text: 'A benefit granted when a person loses 50% of their work capacity, having completed a minimum number of contributions.', correct: true },
-        { text: 'A benefit that recognizes the combined contributions of spouses, who together meet the requirements for an old-age pension.' },
+        { text: 'A focus on health promotion and disease prevention through Primary Health Care.', correct: true },
+        { text: 'A system focused exclusively on treating diseases after they occur.' },
       ],
     },
   },
@@ -291,10 +295,10 @@ const ROOMS = [
     hint: 'At the top of the stairs, where the light gives up…',
     hotspot: { x: 563, y: 181, w: 130, h: 163 },
     question: {
-      text: "Survivor's pension refers to:",
+      text: 'What does Statutory Law 1751 of 2015 recognize as a fundamental right?',
       options: [
-        { text: 'A benefit granted to family members after the death of a member or retiree, seeking to ensure their economic stability.', correct: true },
-        { text: 'A benefit that recognizes the combined contributions of spouses, fulfilling the requirements for an old-age pension.' },
+        { text: 'The right to health.', correct: true },
+        { text: 'The right to receive free private insurance.' },
       ],
     },
   },
